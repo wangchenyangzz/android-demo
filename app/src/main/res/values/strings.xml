@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Demo</string>
+    <string name="button_string_page_list">横向分页列表</string>
 </resources>
