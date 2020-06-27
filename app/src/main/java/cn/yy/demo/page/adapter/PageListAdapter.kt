@@ -35,7 +35,6 @@ class PageListAdapter : RecyclerView.Adapter<PageListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_page, parent, false)
-
         )
     }
 
