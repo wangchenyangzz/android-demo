@@ -11,6 +11,8 @@ import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import cn.yy.demo.corou.CoroutineActivity
+import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.page.PageActivity
 import cn.yy.demo.view.ViewActivity
 import com.bumptech.glide.Glide
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("wcy", "onCreate")
 
+        Log.d("solution", Solution().threeSumClosest(intArrayOf(-1, 2, 1, -4), 1).toString())
+
         verifyStoragePermissions(this)
         setContentView(R.layout.activity_main)
 
@@ -53,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         bt_coroutine?.setOnClickListener {
-//            startActivity(Intent(this, CoroutineActivity::class.java))
+            startActivity(Intent(this, CoroutineActivity::class.java))
         }
 
 //        testRx()
@@ -225,70 +229,4 @@ class MainActivity : AppCompatActivity() {
 
 fun Disposable.addTo(cl: CompositeDisposable) {
     cl.add(this)
-}
-
-class Solution {
-
-    /**
-     * hashmap双循环
-     */
-//    fun threeSum(nums: IntArray): List<List<Int>> {
-//        if (nums.size < 3) return emptyList()
-//        nums.sort()
-//        val list = arrayListOf<List<Int>>()
-//        val map = hashMapOf<Int, Int>()
-//        for (i in nums.indices) {
-//            if (i > 0 && nums[i] == nums[i - 1])
-//                continue
-//            val nums_1 = -nums[i]
-//            for (j in i + 1 until nums.size) {
-//                val value = nums_1 - nums[j]
-//                if (map.containsKey(value)) {
-//                    if(map[value] != Int.MAX_VALUE) {
-//                        list.add(listOf(nums[i], value, map[value] ?: 0))
-//                    }
-//                    map[value] = Int.MAX_VALUE
-//                } else {
-//                    map[nums[j]] = value
-//                }
-//            }
-//            map.clear()
-//        }
-//        return list;
-//    }
-
-    /**
-     * 双指针
-     * @param nums IntArray
-     * @return List<List<Int>>
-     */
-    fun threeSum(nums: IntArray): List<List<Int>> {
-        if (nums.size < 3) return emptyList()
-        nums.sort()
-        var m: Int
-        var n: Int
-        val list = arrayListOf<List<Int>>()
-        for (i in 0 until nums.size - 2) {
-            if (i > 0 && nums[i] == nums[i - 1]) continue
-            m = i + 1
-            n = nums.size - 1
-            while (m < n) {
-                when {
-                    nums[m] + nums[n] < -nums[i] -> m++
-                    nums[m] + nums[n] > -nums[i] -> n--
-                    else -> {
-                        list.add(listOf(nums[i], nums[m], nums[n]))
-                        while (nums[n] == nums[n - 1] && m < n) {
-                            n--
-                        }
-                        while (nums[m] == nums[m + 1] && m < n) {
-                            m++
-                        }
-                        n--
-                    }
-                }
-            }
-        }
-        return list
-    }
 }

@@ -24,7 +24,8 @@ class ViewActivity : AppCompatActivity() {
 //            it.topMargin = 100
 //        })
 
-        cl_root?.addView(TransformView(this), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+//        cl_root?.addView(TransformView(this), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        title = "view"
     }
 
     private fun Int.dip(): Int {
