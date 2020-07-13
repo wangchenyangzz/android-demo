@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Debug
-import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,7 +14,6 @@ import cn.yy.demo.corou.CoroutineActivity
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.page.PageActivity
 import cn.yy.demo.view.ViewActivity
-import com.bumptech.glide.Glide
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,12 +22,13 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
     private val cl = CompositeDisposable()
+
+    private var function: ((String) -> Unit)? = null
 
     // Storage Permissions
     private val REQUEST_EXTERNAL_STORAGE = 1
@@ -41,6 +40,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Debug.startMethodTracing("trace")
         super.onCreate(savedInstanceState)
+
+        function = {
+            Log.d("wcy", it)
+        }
+
+//        function = {
+//            Log.d("wcy", it)
+//        }
+
         Log.d("wcy", "onCreate")
 
         Log.d("solution", Solution().threeSumClosest(intArrayOf(-1, 2, 1, -4), 1).toString())
@@ -59,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         bt_coroutine?.setOnClickListener {
             startActivity(Intent(this, CoroutineActivity::class.java))
         }
+
+        function?.invoke("function invoke")
 
 //        testRx()
 

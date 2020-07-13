@@ -3,6 +3,7 @@ package cn.yy.demo.corou
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import java.io.IOException
+import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -35,8 +37,11 @@ class CoroutineActivity : AppCompatActivity() {
         .build()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, e ->
+        Log.d(TAG, e.message ?: "")
         e.printStackTrace()
     }
+
+    private val mHandler = Handler(Looper.getMainLooper())
 
     private val scope = CoroutineScope(Dispatchers.Main + CoroutineName("my") + exceptionHandler)
 
@@ -49,11 +54,19 @@ class CoroutineActivity : AppCompatActivity() {
         iv_image.setOnClickListener {
             startActivity(Intent(this, ViewActivity::class.java))
         }
+
+        scope.launch {
+            withTimeout(1000) {
+                Log.d(TAG, "start")
+                delay(1100)
+                Log.d(TAG, "end")
+            }
+            Log.d(TAG, "out")
+        }
     }
 
     private fun testCoroutine() {
         scope.launch {
-            Log.d(TAG, Thread.currentThread().name)
 //
 //            GlobalScope.launch {
 //                Log.d(TAG, Thread.currentThread().name)
@@ -61,27 +74,12 @@ class CoroutineActivity : AppCompatActivity() {
 //            Log.d(TAG, Thread.currentThread().name)
 //
 
-            val data1 = async {
-                Log.d(TAG, "1")
-                fetchInfo()
-            }
-
-            val data2 = async {
-                Log.d(TAG, "2")
-                delay(1000)
-                throw IOException()
-                fetchInfo()
-            }
-
-            Log.d(TAG, "${data1.await()}+ ${Thread.currentThread().name}")
-            Log.d(TAG, "${data2.await()}+ ${Thread.currentThread().name}")
-
 //
 //            coroutineScope {
 //                Log.d(TAG, Thread.currentThread().name)
 //            }
 //
-//            supervisorScope {
+//            supervisorScope {≤
 //                Log.d(TAG, Thread.currentThread().name)
 //            }
         }
@@ -91,11 +89,6 @@ class CoroutineActivity : AppCompatActivity() {
 //            val data2 = async { fetchInfo() }
 //            Log.d(TAG, "${data1.await()} + ${data2.await()}")
 //        }
-    }
-
-    private suspend fun fetchInfo(): Weather = withContext(Dispatchers.IO) {
-        return@withContext retrofit.create(AipInterface::class.java).getHomeList()
-    }
 //
 //    private suspend fun fetchAvatar() = suspendCoroutine<String> { continuation ->
 //        if (true) {
@@ -109,10 +102,12 @@ class CoroutineActivity : AppCompatActivity() {
 //        super.onDestroy()
 //        scope.cancel()
 //    }
-}
+    }
 
 
-interface AipInterface {
-    @GET("data/cityinfo/101010100.html")
-    suspend fun getHomeList(): Weather
+    interface AipInterface {
+        @GET("data/cityinfo/101010100.html")
+        suspend fun getHomeList(): Weather
+    }
+
 }
