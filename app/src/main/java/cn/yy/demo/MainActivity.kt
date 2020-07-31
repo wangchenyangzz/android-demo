@@ -10,8 +10,13 @@ import android.os.Debug
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import cn.yy.demo.corou.CoroutineActivity
+import cn.yy.demo.banner.BannerActivity
+//import cn.yy.demo.corou.CoroutineActivity
+import cn.yy.demo.dagger.module.Car
+import cn.yy.demo.dagger.module.DaggerMainComponent
+import cn.yy.demo.dagger.module.MainComponent
 import cn.yy.demo.leetcode.Solution
+import cn.yy.demo.listadapter.ListActivity
 import cn.yy.demo.page.PageActivity
 import cn.yy.demo.view.ViewActivity
 import io.reactivex.Completable
@@ -23,9 +28,13 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var car: Car
+
     private val cl = CompositeDisposable()
 
     private var function: ((String) -> Unit)? = null
@@ -40,6 +49,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Debug.startMethodTracing("trace")
         super.onCreate(savedInstanceState)
+
+        val mainComponent: MainComponent = DaggerMainComponent.create()
+        mainComponent.inject(this)
+
+        Log.d("wcy", "lalala $car")
 
         function = {
             Log.d("wcy", it)
@@ -65,7 +79,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         bt_coroutine?.setOnClickListener {
-            startActivity(Intent(this, CoroutineActivity::class.java))
+//            startActivity(Intent(this, CoroutineActivity::class.java))
+        }
+
+        bt_banner?.setOnClickListener {
+            startActivity(Intent(this, BannerActivity::class.java))
+        }
+
+        bt_list?.setOnClickListener {
+            startActivity(Intent(this, ListActivity::class.java))
         }
 
         function?.invoke("function invoke")

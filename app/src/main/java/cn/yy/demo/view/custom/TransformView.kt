@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import cn.yy.demo.R
-import cn.yy.demo.corou.CoroutineActivity
 
 
 /**
@@ -138,7 +137,7 @@ class TransformView @JvmOverloads constructor(
             animator.start()
 
             it.context.apply {
-                startActivity(Intent(this, CoroutineActivity::class.java))
+//                startActivity(Intent(this, CoroutineActivity::class.java))
             }
         }
     }
