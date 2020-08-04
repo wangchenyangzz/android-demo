@@ -18,6 +18,7 @@ import cn.yy.demo.dagger.module.MainComponent
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.listadapter.ListActivity
 import cn.yy.demo.page.PageActivity
+import cn.yy.demo.paging3.PagingActivity
 import cn.yy.demo.view.ViewActivity
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -88,6 +89,10 @@ class MainActivity : AppCompatActivity() {
 
         bt_list?.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
+        }
+
+        bt_paging_list?.setOnClickListener {
+            startActivity(Intent(this, PagingActivity::class.java))
         }
 
         function?.invoke("function invoke")

@@ -42,6 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="list" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_paging_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="paging_list" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
