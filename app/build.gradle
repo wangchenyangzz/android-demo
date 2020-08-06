@@ -62,6 +62,8 @@ dependencies {
     implementation deps.glide.runtime
     annotationProcessor deps.glide.compiler
 
+    implementation deps.refreshlayout
+
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.atsl.core
     androidTestImplementation deps.atsl.ext_junit

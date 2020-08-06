@@ -2,6 +2,7 @@ package cn.yy.demo.paging3
 
 import android.util.Log
 import androidx.paging.PagingSource
+import kotlinx.coroutines.delay
 
 /**
  *    author : cy.wang
@@ -12,7 +13,7 @@ class  MainSource : PagingSource<Int, String>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, String> {
         val page = params.key ?: 0
         Log.d("123", "加载第$page 页")
-
+        delay(1000)
         return LoadResult.Page(
             data = getString().map {
                 (it.toInt() + page * 30).toString()
