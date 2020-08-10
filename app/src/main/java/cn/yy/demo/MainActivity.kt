@@ -1,25 +1,30 @@
 package cn.yy.demo
 
+//import cn.yy.demo.corou.CoroutineActivity
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import cn.yy.demo.banner.BannerActivity
-//import cn.yy.demo.corou.CoroutineActivity
 import cn.yy.demo.dagger.module.Car
 import cn.yy.demo.dagger.module.DaggerMainComponent
 import cn.yy.demo.dagger.module.MainComponent
+import cn.yy.demo.jobservice.MyJobService
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.listadapter.ListActivity
 import cn.yy.demo.page.PageActivity
 import cn.yy.demo.paging3.PagingActivity
 import cn.yy.demo.view.ViewActivity
+import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -84,7 +89,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         bt_banner?.setOnClickListener {
-            startActivity(Intent(this, BannerActivity::class.java))
+//            startActivity(Intent(this, BannerActivity::class.java))
+            val data = Gson()
         }
 
         bt_list?.setOnClickListener {
@@ -96,6 +102,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         function?.invoke("function invoke")
+
+        bt_job_service?.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val myJobServiceComponentName = ComponentName(this, MyJobService::class.java)
+
+                val jobBuilder =
+                    JobInfo.Builder(MyJobService.MYJOBSERVICE_JOB_ID, myJobServiceComponentName)
+                jobBuilder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                val myJob = jobBuilder.build()
+
+                val scheduler = this.getSystemService(JobScheduler::class.java)
+
+                @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                scheduler.schedule(myJob)
+            }
+        }
 
 //        testRx()
 
