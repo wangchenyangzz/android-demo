@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import cn.yy.demo.dagger.module.Car
 import cn.yy.demo.dagger.module.DaggerMainComponent
 import cn.yy.demo.dagger.module.MainComponent
+import cn.yy.demo.databinding.DataBindActivity
 import cn.yy.demo.jobservice.MyJobService
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.listadapter.ListActivity
@@ -117,6 +118,10 @@ class MainActivity : AppCompatActivity() {
                 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 scheduler.schedule(myJob)
             }
+        }
+
+        dataBindingButton?.setOnClickListener {
+            startActivity(Intent(this, DataBindActivity::class.java))
         }
 
 //        testRx()

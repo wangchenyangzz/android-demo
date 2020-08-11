@@ -32,6 +32,5 @@ class ListActivity : AppCompatActivity() {
                 User("1111", 1)
                 ))
         }, 1000)
-        Log.d("1", "2")
     }
 }
