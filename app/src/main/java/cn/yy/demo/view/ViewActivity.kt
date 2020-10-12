@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.marginTop
 import cn.yy.demo.R
@@ -20,23 +21,17 @@ import java.util.zip.Inflater
 import kotlin.math.roundToInt
 
 class ViewActivity : AppCompatActivity() {
-    private var partyInView: PartyInView? = null
+    private var partyInView: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
-        partyInView = PartyInView(this).apply {
+        partyInView = ImageView(this).apply {
             layoutParams = ViewGroup.LayoutParams(
-                80.dip(),
-                40.dip()
+                105.dip(),
+                86.dip()
             )
-            setOnClickListener {
-                if (this.isRunning) {
-                    this.stop()
-                } else {
-                    this.start()
-                }
-            }
+            setImageDrawable(drawable)
         }
         cl_root?.addView(partyInView)
     }

@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="user" type="cn.yy.demo.databinding.User"/>
+        <variable
+            name="viewModel"
+            type="cn.yy.demo.databinding.DataViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,14 +16,14 @@
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{user.name}"
+            android:text="@{viewModel.name}"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{user.id}"
+            android:text="@{viewModel.id}"
             app:layout_constraintTop_toBottomOf="@id/textView1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

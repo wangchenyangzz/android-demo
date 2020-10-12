@@ -8,13 +8,17 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
+import android.util.ArrayMap
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import cn.yy.demo.banner.BannerActivity
+import cn.yy.demo.broadcast.MyBroadCastReceiver
 import cn.yy.demo.dagger.module.Car
 import cn.yy.demo.dagger.module.DaggerMainComponent
 import cn.yy.demo.dagger.module.MainComponent
@@ -28,6 +32,7 @@ import cn.yy.demo.view.ViewActivity
 import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -36,6 +41,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +51,11 @@ class MainActivity : AppCompatActivity() {
     private val cl = CompositeDisposable()
 
     private var function: ((String) -> Unit)? = null
+
+    private val receiver = MyBroadCastReceiver()
+
+    @Volatile
+    private var num = 0
 
     // Storage Permissions
     private val REQUEST_EXTERNAL_STORAGE = 1
@@ -90,8 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         bt_banner?.setOnClickListener {
-//            startActivity(Intent(this, BannerActivity::class.java))
-            val data = Gson()
+            startActivity(Intent(this, BannerActivity::class.java))
         }
 
         bt_list?.setOnClickListener {
@@ -124,9 +134,56 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, DataBindActivity::class.java))
         }
 
+        arrayMapButton?.setOnClickListener {
+//            testArrayMap()
+            Log.d("volatile", "num is $num")
+        }
+
+        volatileButton?.setOnClickListener {
+            testVolatile()
+        }
+
+        receiverButton?.setOnClickListener {
+            val filter = IntentFilter(Intent.ACTION_TIME_TICK)
+            registerReceiver(receiver, filter)
+        }
 //        testRx()
 
         Debug.stopMethodTracing()
+    }
+
+    private fun testVolatile() {
+        for (i in 0 .. 9) {
+            thread {
+                synchronized(this) {
+                    for (j in 0..999) {
+                        num++
+                    }
+                }
+            }
+        }
+    }
+
+    private fun testArrayMap() {
+//        val arrayMap1 = ArrayMap<String, String>(8)
+//        val arrayMap2 = ArrayMap<String, String>(8)
+//        val arrayMap3 = ArrayMap<String, String>(8)
+//        arrayMap1.clear()
+//        arrayMap2.clear()
+//        arrayMap3.clear()
+        val arrayMap4 = ArrayMap<String, String>(8)
+        arrayMap4["1"] = "1"
+        arrayMap4["2"] = "2"
+        arrayMap4["3"] = "3"
+        arrayMap4["4"] = "4"
+        arrayMap4["5"] = "5"
+        arrayMap4["6"] = "6"
+        arrayMap4["7"] = "7"
+        arrayMap4["8"] = "8"
+        Log.d("wcy", arrayMap4.toString())
+        arrayMap4.clear()
+        val arrayMap1 = ArrayMap<String, String>(8)
+
     }
 
     fun verifyStoragePermissions(activity: Activity?) { // Check if we have write permission
@@ -259,7 +316,18 @@ class MainActivity : AppCompatActivity() {
             })
             .addTo(cl)
 
-
+        Observable.just("wang", "chen", "yang").flatMapCompletable {
+            Log.d("wcy", "out ${Thread.currentThread()}")
+            Completable.fromCallable {
+                Log.d("wcy", "in ${Thread.currentThread()}")
+                it.substring(0, it.length - 2)
+            }.subscribeOn(Schedulers.io())
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+            } , {
+                it.printStackTrace()
+            }).addTo(cl)
     }
 
     override fun onStart() {
@@ -286,6 +354,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("wcy", "onDestroy")
+        unregisterReceiver(receiver)
     }
 
     val animate = ObjectAnimator.ofFloat()
