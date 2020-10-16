@@ -81,5 +81,10 @@
             android:layout_height="wrap_content"
             android:text="receiver" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/genericButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="generic" />
      </LinearLayout>
 </androidx.core.widget.NestedScrollView>

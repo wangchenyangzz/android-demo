@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".databinding.DataBindActivity"></activity>
+        <activity android:name=".generic.GenericActivity"></activity>
+        <activity android:name=".databinding.DataBindActivity" />
         <activity android:name=".paging3.PagingActivity" />
         <activity android:name=".listadapter.ListActivity" />
         <activity android:name=".banner.BannerActivity" />
@@ -35,6 +36,12 @@
         <service
             android:name=".jobservice.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name=".broadcast.MyBroadCastReceiver">
+            <intent-filter>
+                <action android:name="com.yy.test.action.toast" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

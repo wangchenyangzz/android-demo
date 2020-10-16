@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -15,6 +16,7 @@ import android.os.Bundle
 import android.os.Debug
 import android.util.ArrayMap
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import cn.yy.demo.banner.BannerActivity
@@ -23,6 +25,8 @@ import cn.yy.demo.dagger.module.Car
 import cn.yy.demo.dagger.module.DaggerMainComponent
 import cn.yy.demo.dagger.module.MainComponent
 import cn.yy.demo.databinding.DataBindActivity
+import cn.yy.demo.db.BookDbHelper
+import cn.yy.demo.generic.GenericActivity
 import cn.yy.demo.jobservice.MyJobService
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.listadapter.ListActivity
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         Debug.startMethodTracing("trace")
         super.onCreate(savedInstanceState)
@@ -140,20 +145,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         volatileButton?.setOnClickListener {
-            testVolatile()
+//            testVolatile()
+            val helper = BookDbHelper(this, "book.db", 1)
+            helper.writableDatabase.insert("Books", null, ContentValues().apply {
+                put("name", "1")
+            })
+            helper.close()
         }
 
         receiverButton?.setOnClickListener {
-            val filter = IntentFilter(Intent.ACTION_TIME_TICK)
-            registerReceiver(receiver, filter)
+//            val filter = IntentFilter(Intent.ACTION_TIME_TICK)
+//            registerReceiver(receiver, filter)
+//            val packageName = opPackageName
+//            sendBroadcast(Intent("com.yy.test.action.toast").setPackage(packageName))
+        }
+
+        genericButton?.setOnClickListener {
+            startActivity(Intent(this, GenericActivity::class.java))
         }
 //        testRx()
-
         Debug.stopMethodTracing()
     }
 
     private fun testVolatile() {
-        for (i in 0 .. 9) {
+        for (i in 0..9) {
             thread {
                 synchronized(this) {
                     for (j in 0..999) {
@@ -325,7 +340,7 @@ class MainActivity : AppCompatActivity() {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-            } , {
+            }, {
                 it.printStackTrace()
             }).addTo(cl)
     }
