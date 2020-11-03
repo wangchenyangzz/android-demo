@@ -1,9 +1,14 @@
 package cn.yy.demo
 
+import android.util.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import cn.yy.demo.page.PageActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,8 +32,12 @@ class ExampleInstrumentedTest {
     @RunWith(AndroidJUnit4::class)
     class MyTestSuite {
         @Test fun testEvent() {
-            val scenario = ActivityScenario.launch(MainActivity::class.java)
-            scenario.recreate()
+            repeat(100_000) { // 启动大量的协程
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(5000L)
+                    println("." + Thread.currentThread().name)
+                }
+            }
         }
     }
 }

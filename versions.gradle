@@ -22,7 +22,7 @@
 ext.deps = [:]
 def versions = [:]
 versions.activity = '1.1.0'
-versions.android_gradle_plugin = '4.0.1'
+versions.android_gradle_plugin = '4.1.0'
 versions.annotations = "1.0.0"
 versions.apache_commons = "2.5"
 versions.appcompat = "1.2.0-alpha02"
@@ -65,6 +65,7 @@ versions.truth = "1.0.1"
 versions.work = "2.2.0"
 versions.viewpager2="1.0.0"
 versions.smartRefresh="1.1.0"
+versions.workmanager="1.0.0"
 ext.versions = versions
 
 def build_versions = [:]
@@ -216,6 +217,7 @@ work.runtime = "androidx.work:work-runtime:$versions.work"
 work.testing = "androidx.work:work-testing:$versions.work"
 work.firebase = "androidx.work:work-firebase:$versions.work"
 work.runtime_ktx = "androidx.work:work-runtime-ktx:$versions.work"
+work.manager= "android.arch.work:work-runtime-ktx:$versions.workmanager"
 deps.work = work
 
 deps.viewpager2 = "androidx.viewpager2:viewpager2:$versions.viewpager2"

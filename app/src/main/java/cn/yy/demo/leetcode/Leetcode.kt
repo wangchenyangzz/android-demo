@@ -1,6 +1,8 @@
 package cn.yy.demo.leetcode
 
-import kotlin.math.abs
+import android.util.Log
+import java.lang.StringBuilder
+import java.util.*
 
 /**
  *    author : cy.wang
@@ -8,37 +10,72 @@ import kotlin.math.abs
  *    desc   : leetcode
  */
 
+/**
+ * Example:
+ * var li = ListNode(5)
+ * var v = li.`val`
+ * Definition for singly-linked list.
+ * class ListNode(var `val`: Int) {
+ *     var next: ListNode? = null
+ * }
+ */
 class Solution {
-    /* 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
-    示例：
-    输入：nums = [-1,2,1,-4], target = 1
-    输出：2
-    解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。 
-
-    提示：
-    3 <= nums.length <= 10^3
-    -10^3 <= nums[i] <= 10^3
-    -10^4 <= target <= 10^4 */
-    fun threeSumClosest(nums: IntArray, target: Int): Int {
-        nums.sort()
-        var ret = nums[0] + nums[1] + nums[2]
-        for (i in nums.indices) {
-            var m = i + 1
-            var n = nums.size - 1
-            while (m < n) {
-                if (nums[i] + nums[m] + nums[n] == target) {
-                    return target
-                }
-                if (abs(nums[i] + nums[m] + nums[n] - target) < abs(ret - target))  {
-                    ret = nums[i] + nums[m] + nums[n]
-                }
-                if (nums[i] + nums[m] + nums[n] > target) {
-                    n--
-                } else  {
-                    m++
-                }
+    fun reorderList(head: ListNode?): Unit {
+        val stack = Stack<ListNode>()
+        var node = head
+        while (node != null) {
+            stack.push(node)
+            node = node.next
+        }
+        node = head
+        val size = stack.size
+        if (size <= 2) return
+        for (i in 0..size / 2) {
+            if (i == size / 2 && i % 2 == 0) {
+                node?.next = null
+                break
+            }
+            val nd = node?.next
+            node?.next = stack.pop()
+            if (i == size / 2 && i % 2 == 1) {
+                node?.next?.next = null
+            } else {
+                node?.next?.next = nd
+                node = nd
             }
         }
-        return ret
     }
+
+    fun reorderList1(head: ListNode?): Unit {
+        var slow = head
+        var fast = head?.next
+        while (fast?.next != null) {
+            slow = slow?.next
+            fast = fast.next?.next
+        }
+        val last = reverseList(slow)
+        var node1 = head
+        var node2 = last
+        while (node1 != null && node2 != null) {
+            val node = node1.next
+            node1.next = node2
+            val nd = node2.next
+            node2.next = node
+            node1 = node
+            node2 = nd
+        }
+    }
+
+    fun reverseList(head: ListNode?): ListNode? {
+        if(head?.next == null)
+            return head
+        val p: ListNode? = reverseList(head.next)
+        head.next!!.next = head
+        head.next = null
+        return p
+    }
+}
+
+class ListNode(var `val`: Int) {
+    var next: ListNode? = null
 }

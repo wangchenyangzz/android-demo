@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.os.Debug
 import android.util.ArrayMap
 import android.util.Log
+import android.util.LruCache
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,11 +29,15 @@ import cn.yy.demo.databinding.DataBindActivity
 import cn.yy.demo.db.BookDbHelper
 import cn.yy.demo.generic.GenericActivity
 import cn.yy.demo.jobservice.MyJobService
+import cn.yy.demo.leetcode.ListNode
 import cn.yy.demo.leetcode.Solution
 import cn.yy.demo.listadapter.ListActivity
 import cn.yy.demo.page.PageActivity
 import cn.yy.demo.paging3.PagingActivity
+import cn.yy.demo.room.RoomActivity
+import cn.yy.demo.thread.ThreadTestActivity
 import cn.yy.demo.view.ViewActivity
+import cn.yy.demo.workmanager.WorkManagerActivity
 import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -43,6 +48,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.concurrent.thread
@@ -88,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("wcy", "onCreate")
 
-        Log.d("solution", Solution().threeSumClosest(intArrayOf(-1, 2, 1, -4), 1).toString())
+//        Log.d("solution", Solution().threeSumClosest(intArrayOf(-1, 2, 1, -4), 1).toString())
 
         verifyStoragePermissions(this)
         setContentView(R.layout.activity_main)
@@ -153,18 +159,57 @@ class MainActivity : AppCompatActivity() {
             helper.close()
         }
 
+        threadButton?.setOnClickListener {
+            startActivity(Intent(this, ThreadTestActivity::class.java))
+        }
+
         receiverButton?.setOnClickListener {
 //            val filter = IntentFilter(Intent.ACTION_TIME_TICK)
 //            registerReceiver(receiver, filter)
 //            val packageName = opPackageName
 //            sendBroadcast(Intent("com.yy.test.action.toast").setPackage(packageName))
+            val head = ListNode(0)
+            head.next = ListNode(1)
+            head.next?.next = ListNode(2)
+            head.next?.next?.next = ListNode(3)
+            head.next?.next?.next?.next = ListNode(4)
+            Solution().reorderList1(head)
+            var node: ListNode? = head
+            while (node != null) {
+                Log.d("wcy", node.`val`.toString())
+                node = node.next
+            }
+            CoroutineScope(Dispatchers.Main + CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() }).launch {
+                withContext(Dispatchers.IO) {
+
+                }
+            }
         }
 
         genericButton?.setOnClickListener {
             startActivity(Intent(this, GenericActivity::class.java))
         }
 //        testRx()
+            GlobalScope.launch(Dispatchers.Main) {
+                repeat(10) {
+                    launch {
+                        delay(5000L)
+                        Log.d("wcy", "." + Thread.currentThread().name)
+                    }
+                }
+            }
+
+        workButton?.setOnClickListener {
+            startActivity(Intent(this, WorkManagerActivity::class.java))
+        }
+
+        databaseButton?.setOnClickListener {
+            startActivity(Intent(this, RoomActivity::class.java))
+        }
         Debug.stopMethodTracing()
+
+        val str = "wcy"
+        getGenericType<String>() == String::class.java
     }
 
     private fun testVolatile() {
@@ -378,3 +423,5 @@ class MainActivity : AppCompatActivity() {
 fun Disposable.addTo(cl: CompositeDisposable) {
     cl.add(this)
 }
+
+inline fun <reified T> getGenericType() = T::class.java

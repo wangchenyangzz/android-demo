@@ -86,5 +86,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="generic" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/threadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="thread" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/workButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="work manager" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/databaseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="database" />
      </LinearLayout>
 </androidx.core.widget.NestedScrollView>

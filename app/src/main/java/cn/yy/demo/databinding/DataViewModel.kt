@@ -11,7 +11,8 @@ import kotlinx.coroutines.*
  */
 class DataViewModel : ViewModel() {
     private val _name = MutableLiveData<String>()
-    val name: LiveData<String> = _name
+    val name: LiveData<String>
+            get() = _name
 
     val id: LiveData<String> = Transformations.map(_name) {
         "$it + 123"
