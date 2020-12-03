@@ -204,7 +204,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         databaseButton?.setOnClickListener {
-            startActivity(Intent(this, RoomActivity::class.java))
+//            startActivity(Intent(this, RoomActivity::class.java))
+            ObjectAnimator.ofFloat(it, "translationX", 0f, window.windowManager.defaultDisplay.width.toFloat()).apply {
+                duration = 5000
+                start()
+            }
         }
         Debug.stopMethodTracing()
 

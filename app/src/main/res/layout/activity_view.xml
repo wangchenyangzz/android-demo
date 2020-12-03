@@ -4,8 +4,20 @@
     android:id="@+id/cl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:padding="30dp"
+    android:padding="20dp"
+    android:background="#92D8FA"
     tools:context=".view.ViewActivity">
+
+    <cn.yy.demo.view.practice.ThreeDimensionalView
+        android:id="@+id/threeDimensionalView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <cn.yy.demo.view.gift.AvatarSelectView
+        android:id="@+id/avatarSelectView"
+        android:layout_width="160dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom" />
 
 </FrameLayout>

@@ -18,7 +18,7 @@ class  MainSource : PagingSource<Int, String>() {
             data = getString().map {
                 (it.toInt() + page * 30).toString()
             },
-            prevKey = if (page == 0) null else page - 1,
+            prevKey = null,
             nextKey = if (page == 10) null else page + 1
         )
     }

@@ -50,7 +50,6 @@ class PagingActivity : AppCompatActivity() {
         }
 
         mAdapter.addDataRefreshListener {
-//            srl_content.isRefreshing = false
         }
 
         mAdapter.addLoadStateListener { loadState ->
@@ -62,18 +61,11 @@ class PagingActivity : AppCompatActivity() {
 
                 }
                 is LoadState.NotLoading -> {
-//                    srl_content?.finishRefresh()
                 }
             }
         }
 
         viewModel.test()
-
-//        srl_content?.setOnRefreshListener {
-//            mAdapter.refresh()
-//        }
-
-
     }
 }
 
